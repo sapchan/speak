@@ -18,11 +18,11 @@ def hello():
 @app.route("/submit_audio", methods=['POST'])
 def submit_audio():
     if request.method == 'POST':
-        json = request.get_json()
-        uuid_value = json.get('uuid')
-        #audio = request.files['file']
+
+        uuid = request.form['uuid']
+        audio = request.form['file']        
         data['uuid'] = str(uuid_value)
-        #data['file_name'] = str(audio.filename)
+        data['audio'] = audio
         return redirect(url_for('get_audio'))
         #link_to_audio = request.files['file'].audio
 
