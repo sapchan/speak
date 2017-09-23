@@ -1,47 +1,89 @@
+# MHacks X
+# Speak - Speech Recognition
 
-
-# NOTE: this example requires PyAudio because it uses the Microphone class
-
+import contextlib
+import wave
+from os import path
 import speech_recognition as sr
 
-# obtain path to "english.wav" in the same folder as this script
-from os import path
 AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "english.wav")
-#AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "computer_two_hours.wav")
-#AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "egotistical.wav")
-#AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "hawking01.wav")
-
-# AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "french.aiff")
-# AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "chinese.flac")
+FILLER_WORDS = ["ah", "um", "uh", "so", "and", "oh", "like", "you know", "I mean"]
+# AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "computer_two_hours.wav")
+# AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "egotistical.wav")
+# AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "hawking01.wav")
 
 # use the audio file as the audio source
+
 r = sr.Recognizer()
-with sr.AudioFile(AUDIO_FILE) as source:
-    audio = r.record(source) # read the entire audio file
-
-words_arr = "wordies"
-
-# recognize speech using Sphinx
-try:
-    words_arr = r.recognize_sphinx(audio)
-    print("Sphinx thinks you said " + words_arr)
-
-except sr.UnknownValueError:
-    print("Sphinx could not understand audio")
-except sr.RequestError as e:
-    print("Sphinx error; {0}".format(e))
 
 
-# recognize speech using Google Speech Recognition
-try:
-    # for testing purposes, we're just using the default API key
-    # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-    # instead of `r.recognize_google(audio)`
-    print("Google Speech Recognition thinks you said " + r.recognize_google(audio))
-except sr.UnknownValueError:
-    print("Google Speech Recognition could not understand audio")
-except sr.RequestError as e:
-    print("Could not request results from Google Speech Recognition service; {0}".format(e))
+def acquire_audio():
+    with sr.AudioFile(AUDIO_FILE) as source:
+        return r.record(source)  # read the entire audio file
 
 
-print("Final: " + words_arr)
+def google_speech_extract_text(audio):
+    # recognize speech using Google Speech Recognition
+    try:
+        return r.recognize_google(audio)
+    except sr.UnknownValueError:
+        return "Google Speech Recognition could not understand audio"
+    except sr.RequestError as e:
+        return "Google Speech Error error; {0}".format(e)
+
+
+def sphinx_extract_text(audio):
+    # recognize speech using Sphinx
+    try:
+        return r.recognize_sphinx(audio)
+    except sr.UnknownValueError:
+        return "Sphinx could not understand audio"
+    except sr.RequestError as e:
+        return "Sphinx error; {0}".format(e)
+
+
+def filler_word_percentage(words_arr, filler_words):
+    filler_count = 0
+    for filler in filler_words:
+        filler_count = filler_count + words_arr.count(filler)
+    return (float(filler_count) / len(words_arr)) * 100
+
+
+def audio_duration(name):
+    with contextlib.closing(wave.open(name, 'r')) as f:
+        frames = f.getnframes()
+        rate = f.getframerate()
+        duration = frames / float(rate)
+        return duration  # in seconds
+
+
+def words_per_minute(file_name, word_arr):
+    duration = audio_duration(file_name)
+    word_count = len(word_arr)
+    return (float(word_count) / duration) * 60
+
+
+def duplicate_word_percentage(words_arr):
+    words_as_set = set(words_arr)
+    duplicates = len(words_arr) - len(words_as_set)
+    duplicate_percent = (float(duplicates) / len(words_arr)) * 100
+    return duplicate_percent
+
+
+def main():
+    audio = acquire_audio()
+    words = sphinx_extract_text(audio)
+    print("Input: " + AUDIO_FILE)
+    print("Output: " + words)
+    # print("Google: " + google_speech_extract_text(audio))
+    words_arr = words.split(" ")
+    words_arr[0] = "uh"
+    words_arr[1] = "uh"
+    # print(len(words_arr))
+    print("Filler word percent: " + str(filler_word_percentage(words_arr, FILLER_WORDS)) + "%")
+    print("WPM: " + str(words_per_minute(AUDIO_FILE, words_arr)))
+    print("Duplicate Word Percent: " + str(duplicate_word_percentage(words_arr)) + "%")
+
+
+if __name__ == '__main__':
+    main()
