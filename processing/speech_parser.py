@@ -61,6 +61,12 @@ def words_per_minute(file_name, word_arr):
     word_count = len(word_arr)
     return (float(word_count) / duration) * 60
 
+def duplicate_word_percentage(words_arr):
+    words_as_set = set(words_arr)
+    duplicates = len(words_arr) - len(words_as_set)
+    duplicate_percent = (float(duplicates) / len(words_arr)) * 100
+    return duplicate_percent
+
 def main():
     audio = acquire_audio()
     words = sphinx_extract_text(audio)
@@ -69,9 +75,11 @@ def main():
     #print("Google: " + google_speech_extract_text(audio))
     words_arr = words.split(" ")
     words_arr[0] = "uh"
+    words_arr[1] = "uh"
     #print(len(words_arr))
     print("Filler word percent: " + str(filler_word_percentage(words_arr, FILLER_WORDS)) + "%")
     print("WPM: " + str(words_per_minute(AUDIO_FILE, words_arr)))
+    print("Duplicate Word Percent: " + str(duplicate_word_percentage(words_arr)) + "%")
 
 
 
