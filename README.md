@@ -10,5 +10,7 @@ commands:
 3) source env/bin/activate
 4) pip install flask
 5) pip install SpeechRecognition
+6) export FLASK_APP=main.py
+7) flask run
 
 to access on public ip at MHacks: flask run --host=35.3.108.250
