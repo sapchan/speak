@@ -38,7 +38,7 @@ class App extends Component {
       const toBase64 = require('arraybuffer-base64');
       var res = event.originalTarget.result;
       res = toBase64(res);
-      axios.post('http://35.0.134.97:5000/submit_audio', {
+      axios.post('http://127.0.0.1:5000/submit_audio', {
         uuid:uuidv1(),
         file:res
       })
@@ -59,7 +59,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    axios.get('http://35.0.134.97:5000/').then(function(response) {
+    axios.get('http://127.0.0.1:5000/').then(function(response) {
       if (response.data.test && response.data.test.id) {
         this.setState({
           id: response.data.test.id
