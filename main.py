@@ -12,6 +12,8 @@ from pydub import AudioSegment
 from multiprocessing import Pool
 from multiprocessing.dummy import Pool as ThreadPool
 
+import json
+
 app = Flask(__name__)
 CORS(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -86,21 +88,51 @@ def processedData(uuid):
     nameNew = 'processing/'+str(uuid)+'_wav.wav'
     for i in range(0,int(audio_duration(nameNew)),15):
         t1 = i * 1000;
-        t2 = (i + 5) * 1000;
+        t2 = (i + 15) * 1000;
         newAudio = AudioSegment.from_wav(nameNew)
         try:
             newAudio = newAudio[t1:t2]
         except:
-            print('it actually failed probably at i=' + str(i))
             newAudio = newAudio[t1:audio_duration(nameNew)]
         fileName = str(uuid)+'_'+str(t1)+'_'+str(t2)+'_wav.wav'
         saveAs = 'processing/'+fileName
         fileNames.append(fileName)
-        print(fileName)
         newAudio.export(saveAs, format="wav")
-        print(fileName)
-    print(fileNames)
+
     pool = ThreadPool()
     results = pool.map(get_json_analysis_results,fileNames)
-    print(results)
-    return results
+    text = ''
+    avg_wpm = []
+    duplicate_word_percent = []
+    l = 0;
+    fillerWords = []
+    emotions = {}
+    emotions['anger'] = 0
+    emotions['joy'] = 0
+    emotions['sadness'] = 0
+    emotions['fear'] = 0
+    emotions['disgust'] = 0
+    for a in results:
+        text = text + ' ' + a['words']
+        avg_wpm.append(a['average_wpm'])
+        fillerWords.append(a['filler_word_percent'])
+        duplicate_word_percent.append(a['duplicate_word_percent'])
+        for i in a['bluemix_sentiments']['keywords']:
+            l = len(a['bluemix_sentiments']['keywords'])
+            emotions['anger'] = i['emotion']['anger'] + emotions['anger']
+            emotions['joy'] = i['emotion']['joy'] + emotions['joy']
+            emotions['sadness'] = i['emotion']['sadness'] + emotions['sadness']
+            emotions['fear'] = i['emotion']['fear'] + emotions['fear']
+            emotions['disgust'] = i['emotion']['disgust'] + emotions['disgust']
+
+    dat = {}
+    dat['text'] = text
+    dat['avg_wpm'] = avg_wpm
+    dat['duplicate'] = duplicate_word_percent
+    dat['fillerWords'] = fillerWords
+    dat['anger'] = emotions['anger']/l
+    dat['joy'] = emotions['joy']/l
+    dat['sadness'] = emotions['sadness']/l
+    dat['fear'] = emotions['fear']/l
+    dat['disgust'] = emotions['disgust']/l
+    return dat

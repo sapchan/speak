@@ -91,8 +91,6 @@ def duplicate_word_percentage(words_arr):
 def get_json_analysis_results(fileName):
     audio = acquire_audio(fileName)
     words = google_speech_extract_text(audio)
-    print("Input: " + fileName)
-    print("Output: " + words)
     # print("Google: " + google_speech_extract_text(audio))
     words_arr = words.split(" ")
     # print(len(words_arr))
@@ -112,19 +110,12 @@ def get_json_analysis_results(fileName):
             )
         ]
     )
-    print(json.dumps(response, 2))
-    # Local calculations
-    print("Filler word percent: " + str(filler_word_percentage(words_arr, FILLER_WORDS)) + "%")
-    print("WPM: " + str(words_per_minute(words_arr)))
-    print("Duplicate Word Percent: " + str(duplicate_word_percentage(words_arr)) + "%")
     data = {
         "words": words,
         "filler_word_percent": filler_word_percentage(words_arr, FILLER_WORDS),
         "average_wpm": words_per_minute(words_arr),
         "duplicate_word_percent": duplicate_word_percentage(words_arr),
-        "speech_as_text": words,
-        "bluemix_sentiments": response,
-
+        "bluemix_sentiments": response
     }
     return data
 
