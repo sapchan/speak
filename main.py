@@ -35,15 +35,15 @@ def submit_audio():
         audio = json.get('file')
         data['uuid'] = str(uuid_value)
         data['file'] = str(audio)
-        saveWEBM()
-        convertToWAV()
+        saveWEBM(uuid_value)
+        convertToWAV(uuid_value)
         # Dan here is where your methods are going to be called
         # The WAV file is going to be called audio_wav.wav
         # Make sure that all of your methods are done within one overarching methods
         # Make sure that all of your calculations are also added to the json object called data
         # you can do this by doing the following:
         #       data['key'] = value
-        data['analysis'] = processedData()
+        data['analysis'] = processedData(uuid_value)
         # endProcesses()
         return redirect(url_for('get_audio'))
         # link_to_audio = request.files['file'].audio
@@ -54,7 +54,7 @@ def get_audio():
     return jsonify({'data': data})
 
 
-def saveWEBM():
+def saveWEBM(uuid):
     # the file comes in base64 format into data
     # decoding the base64 gives you the arrayBuffer values in a webm file
     # the ffmpeg library can help transform the webm file to a wav file
@@ -65,30 +65,35 @@ def saveWEBM():
     # pass it to dan
     encoded_webm = str(data['file'])
     webm_decoded = encoded_webm.decode('base64')
-    with open("processing/audio_webm.webm", "w") as webm:
+    name = 'processing/'+str(uuid)+'_webm.webm'
+    with open(name, "w") as webm:
         webm.write(webm_decoded)
 
-def convertToWAV():
-    ff = ffmpy.FFmpeg(inputs={'processing/audio_webm.webm': None}, outputs={'processing/audio_wav.wav': None})
+def convertToWAV(uuid):
+    nameOLD = 'processing/'+str(uuid)+'_webm.webm'
+    nameNew = 'processing/'+str(uuid)+'_wav.wav'
+    ff = ffmpy.FFmpeg(inputs={nameOLD: None}, outputs={nameNew: None})
     ff.run()
 
+def endProcesses(uuid):
+    nameOLD = 'processing/'+str(uuid)+'_webm.webm'
+    nameNew = 'processing/'+str(uuid)+'_wav.wav'
+    os.remove(nameNew)
+    os.remove(nameOLD)
 
-def endProcesses():
-    os.remove('processing/audio_wav.wav')
-    os.remove('processing/audio_webm.webm')
-
-def processedData():
+def processedData(uuid):
     fileNames = []
-    for i in range(0,int(audio_duration("processing/audio_wav.wav")),15):
+    nameNew = 'processing/'+str(uuid)+'_wav.wav'
+    for i in range(0,int(audio_duration(nameNew)),15):
         t1 = i * 1000;
         t2 = (i + 5) * 1000;
-        newAudio = AudioSegment.from_wav("processing/audio_wav.wav")
+        newAudio = AudioSegment.from_wav(nameNew)
         try:
             newAudio = newAudio[t1:t2]
         except:
             print('it actually failed probably at i=' + str(i))
-            newAudio = newAudio[t1:audio_duration("processing/audio_wav.wav")]
-        fileName = 'audio_'+str(t1)+'_'+str(t2)+'_wav.wav'
+            newAudio = newAudio[t1:audio_duration(nameNew)]
+        fileName = str(uuid)+'_'+str(t1)+'_'+str(t2)+'_wav.wav'
         saveAs = 'processing/'+fileName
         fileNames.append(fileName)
         print(fileName)
