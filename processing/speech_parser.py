@@ -87,14 +87,19 @@ def duplicate_word_percentage(words_arr):
     return duplicate_percent
 
 
+<<<<<<< HEAD
 def get_json_analysis_results(fileName):
     audio = acquire_audio(fileName)
     words = google_speech_extract_text(audio)
+=======
+def get_json_analysis_results():
+    audio = acquire_audio()
+    words = sphinx_extract_text(audio)
+    print("Input: " + AUDIO_FILE)
+>>>>>>> origin/master
     print("Output: " + words)
     # print("Google: " + google_speech_extract_text(audio))
     words_arr = words.split(" ")
-    words_arr[0] = "uh"
-    words_arr[1] = "uh"
     # print(len(words_arr))
     # Internet connected calculations
     response = natural_language_understanding.analyze(
@@ -103,12 +108,12 @@ def get_json_analysis_results(fileName):
             Features.Entities(
                 emotion=True,
                 sentiment=True,
-                limit=2
+                limit=5
             ),
             Features.Keywords(
                 emotion=True,
                 sentiment=True,
-                limit=2
+                limit=5
             )
         ]
     )
@@ -122,7 +127,9 @@ def get_json_analysis_results(fileName):
         "filler_word_percent": filler_word_percentage(words_arr, FILLER_WORDS),
         "average_wpm": words_per_minute(words_arr),
         "duplicate_word_percent": duplicate_word_percentage(words_arr),
-        "bluemix_sentiments": response
+        "speech_as_text": words,
+        "bluemix_sentiments": response,
+
     }
     return data
 
