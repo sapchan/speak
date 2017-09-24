@@ -35,7 +35,6 @@ def submit_audio():
         # Make sure that all of your calculations are also added to the json object called data
         # you can do this by doing the following:
         #       data['key'] = value
-
         data['analysis'] = get_json_analysis_results()
         endProcesses()
         return redirect(url_for('get_audio'))
