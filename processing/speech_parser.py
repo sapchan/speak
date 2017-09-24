@@ -87,16 +87,11 @@ def duplicate_word_percentage(words_arr):
     return duplicate_percent
 
 
-<<<<<<< HEAD
+
 def get_json_analysis_results(fileName):
     audio = acquire_audio(fileName)
     words = google_speech_extract_text(audio)
-=======
-def get_json_analysis_results():
-    audio = acquire_audio()
-    words = sphinx_extract_text(audio)
-    print("Input: " + AUDIO_FILE)
->>>>>>> origin/master
+    print("Input: " + fileName)
     print("Output: " + words)
     # print("Google: " + google_speech_extract_text(audio))
     words_arr = words.split(" ")
