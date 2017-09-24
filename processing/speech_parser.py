@@ -11,8 +11,10 @@ import watson_developer_cloud.natural_language_understanding.features.v1 \
     as Features
 import json
 
+from multiprocessing import Pool
+from multiprocessing.dummy import Pool as ThreadPool
 
-AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "audio_wav.wav")
+
 FILLER_WORDS = ["ah", "um", "uh", "so", "and", "oh", "like", "you know", "I mean"]
 # AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "computer_two_hours.wav")
 # AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "egotistical.wav")
@@ -32,7 +34,8 @@ natural_language_understanding = NaturalLanguageUnderstandingV1(username=BLUEMIX
 r = sr.Recognizer()
 
 
-def acquire_audio():
+def acquire_audio(fileName):
+    AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), fileName)
     with sr.AudioFile(AUDIO_FILE) as source:
         return r.record(source)  # read the entire audio file
 
@@ -72,10 +75,9 @@ def audio_duration(name):
         return duration  # in seconds
 
 
-def words_per_minute(file_name, word_arr):
-    duration = audio_duration(file_name)
+def words_per_minute(word_arr):
     word_count = len(word_arr)
-    return (float(word_count) / duration) * 60
+    return (float(word_count) / 15) * 60
 
 
 def duplicate_word_percentage(words_arr):
@@ -85,10 +87,9 @@ def duplicate_word_percentage(words_arr):
     return duplicate_percent
 
 
-def get_json_analysis_results():
-    audio = acquire_audio()
+def get_json_analysis_results(fileName):
+    audio = acquire_audio(fileName)
     words = google_speech_extract_text(audio)
-    print("Input: " + AUDIO_FILE)
     print("Output: " + words)
     # print("Google: " + google_speech_extract_text(audio))
     words_arr = words.split(" ")
@@ -114,11 +115,12 @@ def get_json_analysis_results():
     print(json.dumps(response, 2))
     # Local calculations
     print("Filler word percent: " + str(filler_word_percentage(words_arr, FILLER_WORDS)) + "%")
-    print("WPM: " + str(words_per_minute(AUDIO_FILE, words_arr)))
+    print("WPM: " + str(words_per_minute(words_arr)))
     print("Duplicate Word Percent: " + str(duplicate_word_percentage(words_arr)) + "%")
     data = {
+        "words": words,
         "filler_word_percent": filler_word_percentage(words_arr, FILLER_WORDS),
-        "average_wpm": words_per_minute(AUDIO_FILE, words_arr),
+        "average_wpm": words_per_minute(words_arr),
         "duplicate_word_percent": duplicate_word_percentage(words_arr),
         "bluemix_sentiments": response
     }
