@@ -60,15 +60,15 @@ def saveWEBM():
     # pass it to dan
     encoded_webm = str(data['file'])
     webm_decoded = encoded_webm.decode('base64')
-    with open("audio_webm.webm", "w") as webm:
+    with open("processing/audio_webm.webm", "w") as webm:
         webm.write(webm_decoded)
 
 
 def convertToWAV():
-    ff = ffmpy.FFmpeg(inputs={'audio_webm.webm': None}, outputs={'audio_wav.wav': None})
+    ff = ffmpy.FFmpeg(inputs={'processing/audio_webm.webm': None}, outputs={'processing/audio_wav.wav': None})
     ff.run()
 
 
 def endProcesses():
-    os.remove('audio_wav.wav')
-    os.remove('audio_webm.webm')
+    os.remove('processing/audio_wav.wav')
+    os.remove('processing/audio_webm.webm')

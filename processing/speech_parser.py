@@ -12,7 +12,7 @@ import watson_developer_cloud.natural_language_understanding.features.v1 \
 import json
 
 
-AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "english.wav")
+AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "audio_wav.wav")
 FILLER_WORDS = ["ah", "um", "uh", "so", "and", "oh", "like", "you know", "I mean"]
 # AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "computer_two_hours.wav")
 # AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "egotistical.wav")
@@ -87,7 +87,7 @@ def duplicate_word_percentage(words_arr):
 
 def get_json_analysis_results():
     audio = acquire_audio()
-    words = sphinx_extract_text(audio)
+    words = google_speech_extract_text(audio)
     print("Input: " + AUDIO_FILE)
     print("Output: " + words)
     # print("Google: " + google_speech_extract_text(audio))
