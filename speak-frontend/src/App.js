@@ -32,7 +32,7 @@ class App extends Component {
   onStop(recordedBlob) {
     const uuidv1 = require('uuid/v1');
     console.log(recordedBlob);
-    axios.post('http://35.3.108.250:5000/submit_audio', {
+    axios.post('http://127.0.0.1:5000/submit_audio', {
       uuid:uuidv1(),
       file:recordedBlob
     })
@@ -47,7 +47,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    axios.get('http://35.3.108.250:5000/').then(function(response) {
+    axios.get('http://127.0.0.1:5000/').then(function(response) {
       if (response.data.test && response.data.test.id) {
         this.setState({
           id: response.data.test.id
