@@ -3,6 +3,7 @@ from flask import request,redirect,url_for
 from flask_cors import CORS
 import base64
 import ffmpy
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -27,6 +28,13 @@ def submit_audio():
         data['file'] = str(audio)
         saveWEBM()
         convertToWAV()
+        # Dan here is where your methods are going to be called
+        # The WAV file is going to be called audio_wav.wav
+        # Make sure that all of your methods are done within one overarching methods
+        # Make sure that all of your calculations are also added to the json object called data
+        # you can do this by doing the following:
+        #       data['key'] = value
+        endProcesses()
         return redirect(url_for('get_audio'))
         #link_to_audio = request.files['file'].audio
 
@@ -51,3 +59,7 @@ def saveWEBM():
 def convertToWAV():
     ff = ffmpy.FFmpeg(inputs={'audio_webm.webm': None},outputs={'audio_wav.wav': None})
     ff.run()
+
+def endProcesses():
+    os.remove('audio_wav.wav')
+    os.remove('audio_webm.webm')
