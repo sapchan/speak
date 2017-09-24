@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Speak",
+  "name": "Speak: A Tool for Speech Improvement",
   "icons": [
     {
       "src": "favicon.ico",
