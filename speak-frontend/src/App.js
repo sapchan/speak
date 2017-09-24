@@ -3,7 +3,6 @@ import axios from 'axios';
 import './App.css';
 import { ReactMic } from 'react-mic';
 import uuid from 'uuid';
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +15,6 @@ class App extends Component {
 
     this.onStop = this.onStop.bind(this);
   }
-
   startRecording = () => {
     this.setState({
       record: true
@@ -30,24 +28,38 @@ class App extends Component {
   }
 
   onStop(recordedBlob) {
-    const uuidv1 = require('uuid/v1');
-    console.log(recordedBlob);
-    axios.post('http://127.0.0.1:5000/submit_audio', {
-      uuid:uuidv1(),
-      file:recordedBlob
-    })
-    .then(function (response) {
-      this.setState({
-        uuid: response.data.data.uuid
+    //const toBase64 = require('arraybuffer-base64');
+    //const fd = new FormData();
+    //console.log(recordedBlob);
+
+    var fileReader = new FileReader();
+    fileReader.onload = function(event) {
+      const uuidv1 = require('uuid/v1');
+      const toBase64 = require('arraybuffer-base64');
+      var res = event.originalTarget.result;
+      res = toBase64(res);
+      axios.post('http://35.0.134.97:5000/submit_audio', {
+        uuid:uuidv1(),
+        file:res
+      })
+      .then(function (response) {
+        this.setState({
+          uuid: response.data.data.uuid
+        });
+      }.bind(this))
+      .catch(function(error) {
+        console.log(error)
       });
-    }.bind(this))
-    .catch(function(error) {
-      console.log(error)
-    });
+    }.bind(this);
+    fileReader.readAsArrayBuffer(recordedBlob.blob);
+
+
+    //var base64Version = toBase64(arrayBuffer);
+    //fd.append("file",recordedBlob.blob,"file.webm")
   }
 
   componentWillMount() {
-    axios.get('http://127.0.0.1:5000/').then(function(response) {
+    axios.get('http://35.0.134.97:5000/').then(function(response) {
       if (response.data.test && response.data.test.id) {
         this.setState({
           id: response.data.test.id
@@ -61,13 +73,10 @@ class App extends Component {
       <div className="App">
         <ReactMic
           record={this.state.record}
-          className="sound-wave"
           onStop={this.onStop}
-          strokeColor="#000000"
-          backgroundColor="#FF4081" />
+           />
         <button onClick={this.startRecording} type="button">Start</button>
         <button onClick={this.stopRecording} type="button">Stop</button>
-        <p>{this.state.uuid}</p>
       </div>
     );
   }
