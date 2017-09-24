@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask import request,redirect,url_for
 from flask_cors import CORS
 import base64
+from processing.speech_parser import get_json_analysis_results
 import ffmpy
 import os
 
@@ -34,6 +35,8 @@ def submit_audio():
         # Make sure that all of your calculations are also added to the json object called data
         # you can do this by doing the following:
         #       data['key'] = value
+
+        data['analysis'] = get_json_analysis_results()
         endProcesses()
         return redirect(url_for('get_audio'))
         #link_to_audio = request.files['file'].audio

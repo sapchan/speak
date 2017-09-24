@@ -5,13 +5,11 @@ import contextlib
 import wave
 from os import path
 import speech_recognition as sr
-
-import json
+from textblob import TextBlob
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
 import watson_developer_cloud.natural_language_understanding.features.v1 \
-  as Features
+    as Features
 import json
-from pprint import pprint
 
 
 AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "english.wav")
@@ -28,16 +26,10 @@ with open('mhacksx-credentials.json') as data_file:
     BLUEMIX_USERNAME = data['username']
     BLUEMIX_PASSWORD = data['password']
 
-
 natural_language_understanding = NaturalLanguageUnderstandingV1(username=BLUEMIX_USERNAME,
                                                                 password=BLUEMIX_PASSWORD,
                                                                 version=BLUEMIX_API_VERSION)
-
 r = sr.Recognizer()
-
-
-
-
 
 
 def acquire_audio():
@@ -93,9 +85,7 @@ def duplicate_word_percentage(words_arr):
     return duplicate_percent
 
 
-def main():
-
-
+def get_json_analysis_results():
     audio = acquire_audio()
     words = sphinx_extract_text(audio)
     print("Input: " + AUDIO_FILE)
@@ -105,14 +95,9 @@ def main():
     words_arr[0] = "uh"
     words_arr[1] = "uh"
     # print(len(words_arr))
-
-
     # Internet connected calculations
-
     response = natural_language_understanding.analyze(
-        text="IBM is an American multinational technology company headquartered \
-        in Armonk, New York, United States, with operations in over 170 \
-        countries.",
+        text=words,
         features=[
             Features.Entities(
                 emotion=True,
@@ -126,14 +111,23 @@ def main():
             )
         ]
     )
-
     print(json.dumps(response, 2))
-
     # Local calculations
     print("Filler word percent: " + str(filler_word_percentage(words_arr, FILLER_WORDS)) + "%")
     print("WPM: " + str(words_per_minute(AUDIO_FILE, words_arr)))
     print("Duplicate Word Percent: " + str(duplicate_word_percentage(words_arr)) + "%")
+    data = {
+        "filler_word_percent": filler_word_percentage(words_arr, FILLER_WORDS),
+        "average_wpm": words_per_minute(AUDIO_FILE, words_arr),
+        "duplicate_word_percent": duplicate_word_percentage(words_arr),
+        "bluemix_sentiments": response
+    }
+    return data
 
+
+
+def main():
+    get_json_analysis_results()
 
 if __name__ == '__main__':
     main()
