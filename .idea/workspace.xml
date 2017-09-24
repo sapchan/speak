@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d9a43531-750a-4f56-932d-176fd9e26601" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/speak-frontend/package.json" afterPath="$PROJECT_DIR$/speak-frontend/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/speak-frontend/src/App.js" afterPath="$PROJECT_DIR$/speak-frontend/src/App.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/processing/speech_parser.py" afterPath="$PROJECT_DIR$/processing/speech_parser.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,30 +13,45 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/speak$speech_parser.coverage" NAME="speech_parser Coverage Results" MODIFIED="1506179451054" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/processing" />
+    <SUITE FILE_PATH="coverage/speak$speech_parser.coverage" NAME="speech_parser Coverage Results" MODIFIED="1506211319647" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/processing" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.py">
+      <file leaf-file-name="speech_parser.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/processing/speech_parser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="568">
+              <caret line="130" column="0" lean-forward="true" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
               <folding>
-                <element signature="e#0#32#0" expanded="true" />
+                <element signature="e#41#58#0" expanded="true" />
+                <element signature="e#1318#1420#0" expanded="false" />
+                <element signature="e#1466#1760#0" expanded="false" />
+                <element signature="e#1799#2042#0" expanded="false" />
+                <element signature="e#2102#2268#0" expanded="false" />
+                <element signature="e#2301#2494#0" expanded="false" />
+                <element signature="e#2544#2658#0" expanded="false" />
+                <element signature="e#2707#2884#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="speech_parser.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/processing/speech_parser.py">
+      <file leaf-file-name="natural_language_understanding_v1.py" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/local/lib/python2.7/dist-packages/watson_developer_cloud/natural_language_understanding_v1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="64" column="0" lean-forward="true" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-              <folding>
-                <element signature="e#41#58#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="18">
+              <caret line="37" column="0" lean-forward="true" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mhacksx-credentials.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/processing/mhacksx-credentials.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -60,6 +73,9 @@
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/speak-frontend/node_modules" />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="253" />
@@ -183,13 +199,13 @@
     <frame x="253" y="-4" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.058221024" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15687332" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924336" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32924336" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -212,7 +228,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="3" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -233,6 +249,13 @@
           <caret line="88" column="4" lean-forward="false" selection-start-line="88" selection-start-column="4" selection-end-line="88" selection-end-column="4" />
           <folding>
             <element signature="e#41#58#0" expanded="true" />
+            <element signature="e#1318#1420#0" expanded="false" />
+            <element signature="e#1466#1760#0" expanded="false" />
+            <element signature="e#1799#2042#0" expanded="false" />
+            <element signature="e#2102#2268#0" expanded="false" />
+            <element signature="e#2301#2494#0" expanded="false" />
+            <element signature="e#2544#2658#0" expanded="false" />
+            <element signature="e#2707#2884#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -253,6 +276,13 @@
           <caret line="88" column="4" lean-forward="false" selection-start-line="88" selection-start-column="4" selection-end-line="88" selection-end-column="4" />
           <folding>
             <element signature="e#41#58#0" expanded="true" />
+            <element signature="e#1318#1420#0" expanded="false" />
+            <element signature="e#1466#1760#0" expanded="false" />
+            <element signature="e#1799#2042#0" expanded="false" />
+            <element signature="e#2102#2268#0" expanded="false" />
+            <element signature="e#2301#2494#0" expanded="false" />
+            <element signature="e#2544#2658#0" expanded="false" />
+            <element signature="e#2707#2884#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -267,12 +297,35 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/processing/mhacksx-credentials.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/watson_developer_cloud/natural_language_understanding_v1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="37" column="0" lean-forward="true" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/processing/speech_parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="64" column="0" lean-forward="true" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+        <state relative-caret-position="568">
+          <caret line="130" column="0" lean-forward="true" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
           <folding>
             <element signature="e#41#58#0" expanded="true" />
+            <element signature="e#1318#1420#0" expanded="false" />
+            <element signature="e#1466#1760#0" expanded="false" />
+            <element signature="e#1799#2042#0" expanded="false" />
+            <element signature="e#2102#2268#0" expanded="false" />
+            <element signature="e#2301#2494#0" expanded="false" />
+            <element signature="e#2544#2658#0" expanded="false" />
+            <element signature="e#2707#2884#0" expanded="false" />
           </folding>
         </state>
       </provider>

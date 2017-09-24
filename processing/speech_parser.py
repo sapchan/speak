@@ -6,15 +6,38 @@ import wave
 from os import path
 import speech_recognition as sr
 
+import json
+from watson_developer_cloud import NaturalLanguageUnderstandingV1
+import watson_developer_cloud.natural_language_understanding.features.v1 \
+  as Features
+import json
+from pprint import pprint
+
+
 AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "english.wav")
 FILLER_WORDS = ["ah", "um", "uh", "so", "and", "oh", "like", "you know", "I mean"]
 # AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "computer_two_hours.wav")
 # AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "egotistical.wav")
 # AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "hawking01.wav")
+BLUEMIX_USERNAME = ""
+BLUEMIX_PASSWORD = ""
+BLUEMIX_API_VERSION = "2017-02-27"
 
-# use the audio file as the audio source
+with open('mhacksx-credentials.json') as data_file:
+    data = json.load(data_file)
+    BLUEMIX_USERNAME = data['username']
+    BLUEMIX_PASSWORD = data['password']
+
+
+natural_language_understanding = NaturalLanguageUnderstandingV1(username=BLUEMIX_USERNAME,
+                                                                password=BLUEMIX_PASSWORD,
+                                                                version=BLUEMIX_API_VERSION)
 
 r = sr.Recognizer()
+
+
+
+
 
 
 def acquire_audio():
@@ -71,6 +94,8 @@ def duplicate_word_percentage(words_arr):
 
 
 def main():
+
+
     audio = acquire_audio()
     words = sphinx_extract_text(audio)
     print("Input: " + AUDIO_FILE)
@@ -80,6 +105,31 @@ def main():
     words_arr[0] = "uh"
     words_arr[1] = "uh"
     # print(len(words_arr))
+
+
+    # Internet connected calculations
+
+    response = natural_language_understanding.analyze(
+        text="IBM is an American multinational technology company headquartered \
+        in Armonk, New York, United States, with operations in over 170 \
+        countries.",
+        features=[
+            Features.Entities(
+                emotion=True,
+                sentiment=True,
+                limit=2
+            ),
+            Features.Keywords(
+                emotion=True,
+                sentiment=True,
+                limit=2
+            )
+        ]
+    )
+
+    print(json.dumps(response, 2))
+
+    # Local calculations
     print("Filler word percent: " + str(filler_word_percentage(words_arr, FILLER_WORDS)) + "%")
     print("WPM: " + str(words_per_minute(AUDIO_FILE, words_arr)))
     print("Duplicate Word Percent: " + str(duplicate_word_percentage(words_arr)) + "%")
