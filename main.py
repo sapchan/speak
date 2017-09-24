@@ -99,7 +99,7 @@ def processedData(uuid):
         fileNames.append(fileName)
         newAudio.export(saveAs, format="wav")
 
-    pool = ThreadPool()
+    pool = ThreadPool(16)
     results = pool.map(get_json_analysis_results,fileNames)
     text = ''
     avg_wpm = []

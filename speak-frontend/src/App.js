@@ -7,6 +7,8 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip,
    Legend, Radar, RadarChart, PolarGrid, PolarRadiusAxis, PolarAngleAxis,
  BarChart, Bar, ReferenceLine, AreaChart, Area} from 'recharts';
 
+ import { Button, Row, Col, Panel } from 'react-bootstrap';
+
  function CreateLineChart(props){
    return(
      <LineChart width={600} height={300} data={props.LineData}
@@ -47,12 +49,23 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip,
    if(props.flagRender){
      return(
        <div>
-         <h5>Stutter and Duplicate Percentages for your speech</h5>
-         <CreateLineChart LineData={props.LineData}></CreateLineChart>
-         <h5>Sentiment Analysis of your speech</h5>
-         <CreateRadarChart RadarData={props.RadarData}></CreateRadarChart>
-         <h5>Words Per Minute Trends</h5>
-         <CreateAreaChart AreaData={props.AreaData}></CreateAreaChart>
+         <Row>
+           <Col xs={6}>
+             <Panel>
+               <p>{props.text}</p>
+             </Panel>
+           </Col>
+           <Col xs={6}>
+             <Panel>
+               <h4>Stutter and Duplicate Percentages for your speech</h4>
+               <CreateLineChart LineData={props.LineData}></CreateLineChart>
+               <h4>Sentiment Analysis of your speech</h4>
+               <CreateRadarChart RadarData={props.RadarData}></CreateRadarChart>
+               <h4>Words Per Minute Trends</h4>
+               <CreateAreaChart AreaData={props.AreaData}></CreateAreaChart>
+             </Panel>
+           </Col>
+         </Row>
        </div>
      )
    } else {
@@ -60,6 +73,33 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip,
        <div>
          <h1>Record To Show Statistics</h1>
        </div>
+     )
+   }
+ }
+ function CreateReactMic(props) {
+   if(props.showMic){
+     return(
+       <h3>Reload page to try another file</h3>
+     )
+   } else {
+     return(
+       <div>
+         <Row>
+           <ReactMic
+             record={props.record}
+             onStop={props.onStop}
+             strokeColor='#ff5733'
+            />
+        </Row>
+        <Row>
+          <Button bsStyle="default" bsSize="large" onClick={props.start}>
+            Start
+          </Button>
+          <Button bsStyle="default" bsSize="large" onClick={props.stop}>
+            Stop
+          </Button>
+        </Row>
+      </div>
      )
    }
  }
@@ -72,7 +112,29 @@ class App extends Component {
       id: null,
       record: false,
       uuid:null,
-      disp_results:false
+      disp_results:false,
+      data:{
+        'text': 'Hey Just teting to see if this works',
+        'LineData': [
+          {'duplicatepercent': 0, 'stutterwordpercent': 0}
+        ],
+        'RadarData': [
+          { subject: 'Anger', A: 0, fullMark: .69 },
+          { subject: 'Disgust', A: 0,fullMark: .69 },
+          { subject: 'Sadness', A: 0,fullMark: .69 },
+          { subject: 'Joy', A: 0, fullMark: .69 },
+          { subject: 'Fear', A: 0,fullMark: .69 },
+        ],
+        'AreaData': [
+            {'wpm': 0},
+            {'wpm': 0},
+            {'wpm': 0},
+            {'wpm': 0},
+            {'wpm': 0},
+            {'wpm': 0},
+            {'wpm': 0},
+        ]
+      }
     }
 
     this.onStop = this.onStop.bind(this);
@@ -90,7 +152,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    axios.get('http://35.0.134.97:5000/').then(function(response) {
+    axios.get('http://35.3.108.250:5000/').then(function(response) {
       if (response.data.test && response.data.test.id) {
         this.setState({
           id: response.data.test.id
@@ -110,13 +172,42 @@ class App extends Component {
       const toBase64 = require('arraybuffer-base64');
       var res = event.originalTarget.result;
       res = toBase64(res);
-      axios.post('http://35.0.134.97:5000/submit_audio', {
+      axios.post('http://35.3.108.250:5000/submit_audio', {
         uuid:uuidv1(),
         file:res
       })
       .then(function (response) {
+        var analysis = response.data.data.analysis;
+        //console.log(analysis);
+        var line = [];
+        for(var i=0; i < analysis['fillerWords'].length; i = i + 1) {
+          line.push({ 'duplicatepercent': analysis['duplicate'][i] , 'stutterwordpercent':analysis['fillerWords'][i] });
+        }
+
+        var radar = [
+          { subject: 'Anger', A: analysis['anger'], fullMark: .69 },
+          { subject: 'Disgust', A: analysis['disgust'],fullMark: .69 },
+          { subject: 'Sadness', A: analysis['sadness'],fullMark: .69 },
+          { subject: 'Joy', A: analysis['joy'], fullMark: .69 },
+          { subject: 'Fear', A: analysis['fear'],fullMark: .69 },
+        ];
+
+        var area = [];
+        for(var i=0; i < analysis['avg_wpm'].length; i = i + 1) {
+          area.push({ 'wpm': analysis['avg_wpm'][i] });
+        }
+
+        console.log(line);
+        console.log(radar);
+        console.log(area);
         this.setState({
           uuid: response.data.data.uuid,
+          data: {
+            'text':analysis.text,
+            'LineData' : line,
+            'RadarData' : radar,
+            'AreaData' : area
+          },
           disp_results: true,
         });
       }.bind(this))
@@ -132,42 +223,10 @@ class App extends Component {
   }
 
   render() {
-    const LineData = [
-      {name: 'Time Group A', duplicatepercent: 4, stutterwordpercent: 2, amt: 2400},
-      {name: 'Time Group B', duplicatepercent: 3, stutterwordpercent: 13, amt: 2210},
-      {name: 'Time Group C', duplicatepercent: 2, stutterwordpercent: 9, amt: 2290},
-      {name: 'Time Group D', duplicatepercent: 2, stutterwordpercent: 3, amt: 2000},
-      {name: 'Time Group E', duplicatepercent: 1, stutterwordpercent: 4, amt: 2181},
-      {name: 'Time Group F', duplicatepercent: 2, stutterwordpercent: 3, amt: 2500},
-      {name: 'Time Group G', duplicatepercent: 9, stutterwordpercent: 3, amt: 2100},
-    ];
-    const RadarData = [
-      { subject: 'Anger', A: .12, B: 110, fullMark: .69 },
-      { subject: 'Disgust', A: .05, B: 130, fullMark: .69 },
-      { subject: 'Sadness', A: .43, B: 130, fullMark: .69 },
-      { subject: 'Joy', A: .69, B: 100, fullMark: .69 },
-      { subject: 'Fear', A: .45, B: 90, fullMark: .69 },
-    ];
-    const AreaData = [
-        {name: 'Time Group A', wpm: 123},
-        {name: 'Time Group B', wpm: 140},
-        {name: 'Time Group C', wpm: 135},
-        {name: 'Time Group D'},
-        {name: 'Time Group E', wpm: 100},
-        {name: 'Time Group F', wpm: 80},
-        {name: 'Time Group G', wpm: 120},
-    ];
     return (
       <div className="App">
-        <ReactMic
-          record={this.state.record}
-          onStop={this.onStop}
-           />
-        <button onClick={this.startRecording} type="button">Start</button>
-        <button onClick={this.stopRecording} type="button">Stop</button>
-
-        <CreateVisualGraphics LineData={LineData} RadarData={RadarData} AreaData={AreaData} flagRender={this.state.disp_results}></CreateVisualGraphics>
-
+        <CreateReactMic start={this.startRecording} stop={this.stopRecording} record={this.state.record} onStop={this.onStop} showMic={this.state.disp_results}/>
+        <CreateVisualGraphics text={this.state.data.text} LineData={this.state.data.LineData} RadarData={this.state.data.RadarData} AreaData={this.state.data.AreaData} flagRender={this.state.disp_results}></CreateVisualGraphics>
       </div>
     );
   }
