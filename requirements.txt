@@ -19,7 +19,7 @@ lizard==1.12.15
 MarkupSafe==1.0
 matplotlib==1.5.1
 ndg-httpsclient==0.4.0
-nltk==3.2.4
+nltk==3.4.5
 numpy==1.13.1
 Pillow==3.1.2
 pocketsphinx==0.1.3
