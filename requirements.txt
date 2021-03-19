@@ -13,7 +13,7 @@ idna==2.6
 ipaddr==2.1.11
 ipaddress==1.0.18
 itsdangerous==0.24
-Jinja2==2.9.6
+Jinja2==2.11.3
 ldap3==2.3
 lizard==1.12.15
 MarkupSafe==1.0
